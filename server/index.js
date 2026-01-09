@@ -1,0 +1,34 @@
+const express = require('express');
+const cors = require('cors');
+const sequelize = require('./db');
+const User = require('./models/User');
+const Class = require('./models/Class.js');     
+const Booking = require('./models/Booking'); 
+const authRoutes = require('./routes/authRoutes');
+const classRoutes = require('./routes/classRoutes'); 
+const bookingRoutes = require('./routes/bookingRoutes');
+const membershipRoutes = require('./routes/membershipRoutes');
+const path = require('path');
+const app = express();
+const userRoutes = require('./routes/userRoutes');
+
+app.use(cors());
+app.use(express.json());
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/membership', membershipRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/classes', classRoutes); 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/users', userRoutes);
+
+// Sinkronisasi Database
+sequelize.sync() 
+    .then(() => {
+        console.log("✅ Database Lengkap (Users, Classes, Bookings) Siap!");
+        app.listen(5000, () => {
+            console.log('🚀 Server running on port 5000');
+        });
+    })
+    .catch(err => {
+        console.error("❌ Gagal Konek Database:", err);
+    });
