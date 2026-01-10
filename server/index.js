@@ -32,3 +32,5 @@ sequelize.sync()
     .catch(err => {
         console.error("❌ Gagal Konek Database:", err);
     });
+
+module.exports = app;
