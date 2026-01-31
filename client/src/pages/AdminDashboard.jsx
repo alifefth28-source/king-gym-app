@@ -43,14 +43,14 @@ const AdminDashboard = () => {
 
     const fetchClasses = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/classes');
+            const res = await axios.get('https://king-gym-api.vercel.app/api/classes');
             setClasses(res.data);
         } catch (err) { console.error(err); }
     };
 
     const fetchUsers = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/auth/users');
+            const res = await axios.get('https://king-gym-api.vercel.app/api/auth/users');
             setUsers(res.data);
         } catch (err) { console.error(err); }
     };
@@ -60,7 +60,7 @@ const AdminDashboard = () => {
         if (!result.isConfirmed) return;
 
         try {
-            await axios.delete(`http://localhost:5000/api/classes/${id}`, {
+            await axios.delete(`https://king-gym-api.vercel.app/api/classes/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             MySwal.toast('success', "Kelas berhasil dihapus!");

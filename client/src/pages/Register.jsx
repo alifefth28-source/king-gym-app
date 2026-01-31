@@ -15,7 +15,7 @@ const Register = () => {
         setError('');
 
         try {
-            await axios.post('http://localhost:5000/api/auth/register', {
+            await axios.post('https://king-gym-api.vercel.app/api/auth/register', {
                 username,
                 email,
                 password

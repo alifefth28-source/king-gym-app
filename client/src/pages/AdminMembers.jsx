@@ -21,7 +21,7 @@ const AdminMembers = () => {
 
     const fetchUsers = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/auth/users');
+            const res = await axios.get('https://king-gym-api.vercel.app/api/auth/users');
             setUsers(res.data);
         } catch (err) {
             console.error("Gagal ambil data user:", err);
@@ -76,7 +76,7 @@ const AdminMembers = () => {
         
         if (formValues) {
             try {
-                await axios.post('http://localhost:5000/api/auth/register', formValues);
+                await axios.post('https://king-gym-api.vercel.app/api/auth/register', formValues);
                 
                
                 let pesan = `Member ${formValues.username} berhasil didaftarkan.`;

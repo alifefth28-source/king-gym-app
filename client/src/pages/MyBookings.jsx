@@ -9,7 +9,7 @@ const MyBookings = () => {
 
     const fetchMyBookings = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/bookings', {
+            const res = await axios.get('https://king-gym-api.vercel.app/api/bookings', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setBookings(res.data);
@@ -32,7 +32,7 @@ const MyBookings = () => {
         if (!result.isConfirmed) return;
 
         try {
-            await axios.delete(`http://localhost:5000/api/bookings/${bookingId}`, {
+            await axios.delete(`https://king-gym-api.vercel.app/api/bookings/${bookingId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             

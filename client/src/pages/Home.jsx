@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { Reveal } from '../components/Reveal';
+
 
 const Home = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -215,11 +217,13 @@ const Home = () => {
                             Join Now
                         </Link>
                     </div>
+                     
 
                     {/* Bagian Kanan: Grid Foto Trainer */}
                     <div className="md:w-2/3 w-full">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             {trainers.map((trainer, idx) => (
+                                <Reveal>
                                 <div key={idx} className="relative group overflow-hidden rounded-xl bg-gray-900 shadow-2xl border border-gray-800">
                                     <div className="absolute inset-0 bg-gradient-to-t from-indigo-900 via-transparent to-transparent opacity-80"></div>
                                     
@@ -234,6 +238,7 @@ const Home = () => {
                                         <p className="text-indigo-300 text-xs font-semibold tracking-wider uppercase">{trainer.role}</p>
                                     </div>
                                 </div>
+                                 </Reveal>
                             ))}
                         </div>
                     </div>

@@ -13,7 +13,7 @@ const Profile = () => {
     // 1. FUNGSI AMBIL DATA USER
     const fetchProfile = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/auth/me', {
+            const res = await axios.get('https://king-gym-api.vercel.app/api/auth/me', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUser(res.data);
@@ -36,7 +36,7 @@ const Profile = () => {
 
         setLoading(true);
         try {
-            await axios.post('http://localhost:5000/api/auth/upload-photo', formData, {
+            await axios.post('https://king-gym-api.vercel.app/api/auth/upload-photo', formData, {
                 headers: { 
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'

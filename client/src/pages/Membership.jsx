@@ -17,7 +17,7 @@ const Membership = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/auth/me', {
+                const res = await axios.get('https://king-gym-api.vercel.app/api/auth/me', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setCurrentUser(res.data);
@@ -120,7 +120,7 @@ const Membership = () => {
                 try {
                     await new Promise(resolve => setTimeout(resolve, 2000));
 
-                    const res = await axios.post('http://localhost:5000/api/users/membership', 
+                    const res = await axios.post('https://king-gym-api.vercel.app/api/users/membership', 
                         { membershipType: pkg.type }, 
                         { headers: { Authorization: `Bearer ${token}` } }
                     );

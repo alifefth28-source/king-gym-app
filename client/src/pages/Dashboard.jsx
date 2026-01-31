@@ -10,7 +10,7 @@ const Dashboard = () => {
 
     const fetchClasses = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/classes', {
+            const res = await axios.get('https://king-gym-api.vercel.app/api/classes', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setClasses(res.data);
@@ -31,7 +31,7 @@ const Dashboard = () => {
         if (!result.isConfirmed) return;
 
         try {
-            await axios.post('http://localhost:5000/api/bookings', 
+            await axios.post('https://king-gym-api.vercel.app/api/bookings', 
                 { classId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
