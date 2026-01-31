@@ -171,3 +171,56 @@ exports.register = async (req, res) => {
         res.status(500).json({ message: "Terjadi kesalahan server" });
     }
 };
+
+exports.scanMember = async (req, res) => {
+    try {
+        const { qrData } = req.body;
+
+     
+        if (!qrData.startsWith("KINGGYM-")) {
+            return res.status(400).json({ message: "QR Code Tidak Valid! Bukan milik King Gym." });
+        }
+
+        const parts = qrData.split('-');
+      
+        const userId = parts[1];
+
+    
+        const member = await User.findByPk(userId);
+
+        if (!member) {
+            return res.status(404).json({ message: "Member tidak ditemukan di database." });
+        }
+
+        if (!member.membership_type) {
+            return res.status(400).json({ 
+                status: 'invalid',
+                member: member,
+                message: "User ini belum mendaftar membership!" 
+            });
+        }
+
+    
+        const now = new Date();
+        const expiryDate = new Date(member.membership_expiry);
+
+        if (expiryDate < now) {
+            return res.status(200).json({ 
+                status: 'expired',
+                member: member,
+                message: `Membership ${member.membership_type} sudah KADALUARSA!` 
+            });
+        }
+
+   
+        return res.status(200).json({
+            status: 'success',
+            member: member,
+            message: "Akses Diterima. Selamat Berlatih!"
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Terjadi kesalahan server saat scan." });
+    }
+};

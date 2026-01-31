@@ -21,7 +21,7 @@ app.use('/api/classes', classRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/users', userRoutes);
 
-// Sinkronisasi Database
+
 sequelize.sync() 
     .then(() => {
         console.log("✅ Database Lengkap (Users, Classes, Bookings) Siap!");

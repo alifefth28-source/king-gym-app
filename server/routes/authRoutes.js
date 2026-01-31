@@ -5,6 +5,7 @@ const { verifyToken } = require('../middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
 
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
 
@@ -23,6 +24,7 @@ router.post('/login', authController.login);
 router.get('/users', authController.getAllUsers);
 router.get('/me', verifyToken, authController.getMe);
 router.get('/users', authController.getAllUsers);
+router.post('/scan', authController.scanMember);
 
 // Rute Upload Foto (Menggunakan middleware upload.single)
 router.post('/upload-photo', verifyToken, upload.single('photo'), authController.uploadPhoto); 
