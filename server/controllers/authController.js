@@ -100,7 +100,7 @@ exports.uploadPhoto = async (req, res) => {
         }
 
         const userId = req.user.id;
-        const photoUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+        const photoUrl = `https://king-gym-api.vercel.app/uploads/${req.file.filename}`;
 
         await User.update({ profile_picture: photoUrl }, { where: { id: userId } });
 
