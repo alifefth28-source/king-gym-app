@@ -12,7 +12,13 @@ const path = require('path');
 const app = express();
 const userRoutes = require('./routes/userRoutes');
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:5173",                
+        "https://king-gym-app.vercel.app"       
+    ],
+    credentials: true
+}));
 app.use(express.json());
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/membership', membershipRoutes);
