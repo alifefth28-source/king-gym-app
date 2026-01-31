@@ -53,7 +53,7 @@ exports.login = async (req, res) => {
         res.json({
         token,
         role: user.role,
-        username: user.username, // <--- PASTIKAN BARIS INI ADA
+        username: user.username, 
         message: "Login berhasil"
     });
 
