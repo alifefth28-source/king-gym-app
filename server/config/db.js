@@ -1,3 +1,4 @@
+// REVISI FINAL VERCEL
 const { Sequelize } = require('sequelize');
 const mysql2 = require('mysql2'); // Wajib import ini untuk Vercel
 require('dotenv').config();
