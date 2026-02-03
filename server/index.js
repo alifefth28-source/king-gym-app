@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./config/db');
+const db = require('./config/db'); // Variabelnya bernama "db"
 const User = require('./models/User');
 const Class = require('./models/Class.js');     
 const Booking = require('./models/Booking'); 
@@ -12,14 +12,19 @@ const path = require('path');
 const app = express();
 const userRoutes = require('./routes/userRoutes');
 
+// --- PENTING: Set Origin agar Frontend Vercel bisa akses ---
 app.use(cors({
     origin: [
         "http://localhost:5173",                
-        "https://king-gym-app.vercel.app"       
+        "https://king-gym-app.vercel.app"
+        // Tambahkan domain lain jika ada
     ],
     credentials: true
 }));
+
 app.use(express.json());
+
+// Routes
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/membership', membershipRoutes);
 app.use('/api/auth', authRoutes);
@@ -27,8 +32,9 @@ app.use('/api/classes', classRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/users', userRoutes);
 
-
-sequelize.sync() 
+// --- PERBAIKAN DISINI ---
+// Gunakan "db" karena diatas kita import sebagai "const db"
+db.sync() 
     .then(() => {
         console.log("✅ Database Lengkap (Users, Classes, Bookings) Siap!");
         app.listen(5000, () => {
