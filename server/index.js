@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const sequelize = require('./db');
+const db = require('./config/db');
 const User = require('./models/User');
 const Class = require('./models/Class.js');     
 const Booking = require('./models/Booking'); 
