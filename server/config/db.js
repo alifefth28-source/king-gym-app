@@ -1,12 +1,8 @@
 const { Sequelize } = require('sequelize');
-const mysql2 = require('mysql2'); // Wajib import ini untuk Vercel
+const mysql2 = require('mysql2'); // Wajib untuk Vercel
 
-// --- MODIFIKASI SUPAYA LOG BERSIH DI VERCEL ---
-// Hanya jalankan dotenv kalau di Laptop (Development)
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
-// ---------------------------------------------
+// HAPUS BAGIAN DOTENV (Biar log bersih)
+// Environment variables akan otomatis dibaca oleh Vercel
 
 const db = new Sequelize(
     process.env.DB_NAME, 
@@ -16,14 +12,9 @@ const db = new Sequelize(
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         dialect: 'mysql',
-        
-        // --- OBAT ERROR VERCEL ---
-        dialectModule: mysql2, 
-        // -------------------------
-
+        dialectModule: mysql2, // 🔥 PASTIKAN INI ADA
         logging: false,
         dialectOptions: {
-            // TiDB butuh SSL
             ssl: {
                 require: true,
                 rejectUnauthorized: false
@@ -38,9 +29,11 @@ const db = new Sequelize(
     }
 );
 
-// Cek koneksi
+// Logging manual agar kita tahu statusnya di Vercel Logs
+console.log(`📡 Mencoba konek ke DB: ${process.env.DB_NAME} @ ${process.env.DB_HOST}`);
+
 db.authenticate()
-  .then(() => console.log('✅ Berhasil konek ke Database'))
-  .catch(err => console.error('❌ Gagal konek ke Database:', err));
+  .then(() => console.log('✅ BERHASIL KONEK DATABASE!'))
+  .catch(err => console.error('❌ GAGAL KONEK DATABASE:', err));
 
 module.exports = db;
