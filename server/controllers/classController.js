@@ -1,6 +1,6 @@
 const Class = require('../models/Class');
 const Booking = require('../models/Booking'); 
-const db = require('./config/db');
+const sequelize = require('../config/db');
 
 
 exports.createClass = async (req, res) => {
