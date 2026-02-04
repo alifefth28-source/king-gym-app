@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./config/db'); // Variabelnya bernama "db"
+const sequelize = require('../config/db'); // Variabelnya bernama "db"
 const User = require('./models/User');
 const Class = require('./models/Class.js');     
 const Booking = require('./models/Booking'); 
@@ -34,7 +34,7 @@ app.use('/api/users', userRoutes);
 
 // --- PERBAIKAN DISINI ---
 // Gunakan "db" karena diatas kita import sebagai "const db"
-db.sync() 
+sequelize.sync() 
     .then(() => {
         console.log("✅ Database Lengkap (Users, Classes, Bookings) Siap!");
         app.listen(5000, () => {
