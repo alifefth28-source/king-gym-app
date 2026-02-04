@@ -31,7 +31,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/users', userRoutes);
 
 // Sinkronisasi Database
-sequelize.sync() 
+sequelize.authenticate() 
     .then(() => {
         console.log("✅ Database Lengkap Siap!");
         // Di Vercel, app.listen sebenarnya tidak wajib, tapi tidak apa-apa ada disini
