@@ -46,3 +46,4 @@ sequelize.authenticate()
     });
 
 module.exports = app;
+// Force update Vercel
