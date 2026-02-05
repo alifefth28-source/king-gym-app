@@ -21,7 +21,7 @@ const db = new Sequelize(process.env.DATABASE_URL, {
         min: 0,
         acquire: 30000,
         idle: 10000
-    }
+    }``
 });
 
 // Logging status koneksi (mengambil host dari config sequelize yang sudah di-parse)
