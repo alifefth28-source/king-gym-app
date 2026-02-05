@@ -19,12 +19,14 @@ const app = express();
 
 app.use(cors({
     origin: [
-        "http://localhost:5173",                
-        "https://king-gym-app.vercel.app"
+        "https://king-gym-app.vercel.app", 
+        "http://localhost:5173",
+        "https://king-gym-p2ipsya6b-radjas-projects-b03780ee.vercel.app"
     ],
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
 app.use(express.json());
 
 // --- ROUTE TEST DATABASE & BUAT TABEL ---
