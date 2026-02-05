@@ -8,7 +8,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Logic Auth (TIDAK DIUBAH, SAMA SEPERTI SEBELUMNYA)
+    // Logic Auth (TIDAK DIUBAH)
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
     const isLoggedIn = !!token;
@@ -21,7 +21,7 @@ const Navbar = () => {
         });
     };
 
-    // Efek agar navbar berubah warna saat discroll
+    // Efek scroll (Hanya untuk shadow dan padding, bukan transparansi lagi agar aman)
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 50) {
@@ -34,11 +34,12 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Daftar Menu (Supaya rapi)
+    // Daftar Menu (Membership DITAMBAHKAN di sini)
     const menuItems = [
         { name: 'Cari Kelas', path: '/classes' },
         { name: 'Jadwal Saya', path: '/my-bookings' },
-        { name: 'Panduan Pemula', path: '/guide' },
+        { name: 'Membership', path: '/membership' }, // <-- MENU BARU DITAMBAHKAN
+        { name: 'Panduan Pemula', path: '/Tutorial' },
         { name: 'Profil Saya', path: '/profile' },
     ];
 
@@ -52,7 +53,10 @@ const Navbar = () => {
     };
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-gray-900 shadow-xl py-2' : 'bg-transparent py-4'}`}>
+        // PERUBAHAN UTAMA DI SINI:
+        // 1. Menggunakan 'sticky top-0' agar konten di bawahnya turun (tidak nabrak).
+        // 2. Menggunakan 'bg-gray-900' (hitam) permanen agar teks putih selalu terbaca.
+        <nav className={`sticky top-0 z-50 w-full transition-all duration-300 bg-gray-900 ${scrolled ? 'shadow-xl py-2' : 'py-4'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     
