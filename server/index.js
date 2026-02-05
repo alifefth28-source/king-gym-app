@@ -18,15 +18,13 @@ const User = require('./models/User');
 const app = express();
 
 app.use(cors({
-    origin: [
-        "https://king-gym-app.vercel.app", 
-        "http://localhost:5173",
-        "https://king-gym-p2ipsya6b-radjas-projects-b03780ee.vercel.app"
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: '*',  // Buka untuk semua alamat
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Tambahkan OPTIONS
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
+
+app.options('*', cors());
+
 app.use(express.json());
 
 // --- ROUTE TEST DATABASE & BUAT TABEL ---
