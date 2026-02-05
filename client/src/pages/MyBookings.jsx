@@ -5,12 +5,18 @@ import MySwal from '../utils/MySwal';
 
 const MyBookings = () => {
     const [bookings, setBookings] = useState([]);
+    // Tambahan: State untuk mengetahui apakah sedang loading atau ada error
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
     const token = localStorage.getItem('token');
 
-    // Gunakan URL API yang benar
+    // URL API yang benar
     const API_URL = 'https://king-gym-p2ipsya6b-radjas-projects-b03780ee.vercel.app/api';
 
     const fetchMyBookings = async () => {
+        setLoading(true); // Mulai loading
+        setError(null);   // Reset error
         try {
             const res = await axios.get(`${API_URL}/bookings`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -18,6 +24,10 @@ const MyBookings = () => {
             setBookings(res.data);
         } catch (err) {
             console.error("Gagal ambil data booking:", err);
+            // Simpan pesan error untuk ditampilkan di UI
+            setError("Gagal mengambil data. Pastikan koneksi internet stabil atau coba login ulang.");
+        } finally {
+            setLoading(false); // Selesai loading (baik sukses maupun gagal)
         }
     };
 
@@ -64,15 +74,28 @@ const MyBookings = () => {
                     Jadwal Latihan Saya
                 </h1>
 
-                {bookings.length === 0 ? (
+                {/* --- LOGIC TAMPILAN BERDASARKAN STATUS --- */}
+                {loading ? (
+                    // TAMPILAN SAAT LOADING
+                    <div className="text-center py-10">
+                        <p className="text-xl font-bold text-gray-500 animate-pulse">⏳ Sedang memuat jadwal...</p>
+                    </div>
+                ) : error ? (
+                    // TAMPILAN SAAT ERROR
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center">
+                        <strong className="font-bold">Terjadi Kesalahan! </strong>
+                        <span className="block sm:inline">{error}</span>
+                    </div>
+                ) : bookings.length === 0 ? (
+                    // TAMPILAN SAAT DATA KOSONG
                     <div className="bg-white p-10 rounded-xl shadow-md text-center text-gray-500">
                         <p className="text-xl font-medium">Belum ada kelas yang di-booking.</p>
                         <p className="mt-2 text-sm">Ayo cari kelas di menu "Cari Kelas"!</p>
                     </div>
                 ) : (
+                    // TAMPILAN DATA (TABLE & CARD)
                     <>
                         {/* --- TAMPILAN DESKTOP (TABEL) --- */}
-                        {/* hidden di HP, block di layar md ke atas */}
                         <div className="hidden md:block bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200">
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-900 text-white">
@@ -112,12 +135,11 @@ const MyBookings = () => {
                         </div>
 
                         {/* --- TAMPILAN MOBILE (KARTU) --- */}
-                        {/* block di HP, hidden di layar md ke atas */}
                         <div className="md:hidden space-y-4">
                             {bookings.map((item) => (
                                 <div key={item.id} className="bg-white p-5 rounded-xl shadow-md border border-gray-200 flex flex-col space-y-3">
                                     
-                                    {/* Header Kartu: Nama Kelas & Status */}
+                                    {/* Header Kartu */}
                                     <div className="flex justify-between items-start">
                                         <div>
                                             <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
@@ -128,7 +150,6 @@ const MyBookings = () => {
                                         </span>
                                     </div>
 
-                                    {/* Divider */}
                                     <div className="border-t border-gray-100"></div>
 
                                     {/* Info Jadwal */}
@@ -139,7 +160,7 @@ const MyBookings = () => {
                                         {formatDate(item.schedule)}
                                     </div>
 
-                                    {/* Tombol Aksi Full Width */}
+                                    {/* Tombol Aksi */}
                                     <button 
                                         onClick={() => handleCancel(item.id, item.name)}
                                         className="w-full mt-2 bg-red-50 text-red-600 font-bold py-3 rounded-lg hover:bg-red-100 transition border border-red-200 flex items-center justify-center"
