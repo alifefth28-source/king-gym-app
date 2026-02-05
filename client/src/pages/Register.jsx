@@ -58,10 +58,10 @@ const Register = () => {
             </div>
 
             {/* Bagian Kanan (Form) */}
-            <div className="w-full lg:w-1/2 flex justify-center items-center bg-white p-10">
-                <div className="w-full max-w-md space-y-8">
+            <div className="w-full lg:w-1/2 flex justify-center items-center bg-white p-6 md:p-10">
+                <div className="w-full max-w-md space-y-6 md:space-y-8">
                     <div className="text-center">
-                        <h2 className="text-4xl font-extrabold text-gray-900 mb-2">Daftar Member Baru</h2>
+                        <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-2">Daftar Member Baru</h2>
                         <p className="text-gray-500">Bergabunglah dengan komunitas King Gym.</p>
                     </div>
 

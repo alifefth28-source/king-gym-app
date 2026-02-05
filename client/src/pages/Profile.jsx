@@ -59,7 +59,7 @@ const Profile = () => {
             <Navbar />
             
             {/* CONTAINER UTAMA */}
-            <div className="max-w-6xl mx-auto py-12 px-4 flex-grow w-full">
+            <div className="max-w-6xl mx-auto py-8 px-4 md:py-12 flex-grow w-full">
                 
                 {/* --- HEADER JUDUL --- */}
                 <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
@@ -70,7 +70,7 @@ const Profile = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                     
                     {/* BAGIAN KIRI: KARTU MEMBER DIGITAL */}
-                    <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center">
+                    <div className="bg-white p-4 md:p-6 rounded-2xl shadow-lg flex flex-col items-center">
                         <h2 className="text-lg font-bold text-gray-700 mb-6">Kartu Member Digital</h2>
                         
                         {/* COMPONENT KARTU QR */}
@@ -87,7 +87,7 @@ const Profile = () => {
                     <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
                         
                         {/* HEADER BIRU */}
-                        <div className="bg-indigo-600 p-8 text-center">
+                        <div className="bg-indigo-600 p-6 md:p-8 text-center">
                             {/* FOTO PROFIL */}
                             <div className="relative w-32 h-32 mx-auto mb-4 group">
                                 {user.profile_picture ? (

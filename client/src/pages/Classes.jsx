@@ -79,29 +79,29 @@ const Classes = () => {
       <Navbar />
 
       {/* HERO SECTION */}
-      <div className="relative bg-black text-white py-24 px-4 overflow-hidden">
+      <div className="relative bg-black text-white py-12 md:py-24 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-40">
            <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1375&auto=format&fit=crop" className="w-full h-full object-cover" alt="Gym Hero" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
+            <h1 className="text-3xl md:text-7xl font-black uppercase tracking-tighter mb-4">
                 World Class <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Programs</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-gray-300 max-w-2xl mx-auto">
                 Temukan kelas yang sesuai dengan tujuan fitness Anda. Dari ketenangan Yoga hingga intensitas Muay Thai, kami punya semuanya.
             </p>
         </div>
       </div>
 
       {/* CLASS SECTIONS */}
-      <div className="max-w-7xl mx-auto px-4 py-16 space-y-24">
+      <div className="max-w-7xl mx-auto px-4 py-10 md:py-16 space-y-12 md:space-y-24">
         {classesData.map((item, index) => (
             <div key={item.id} id={item.id} className={`flex flex-col md:flex-row gap-8 items-center ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
                 
                 {/* Image Side */}
                 <div className="w-full md:w-1/2 relative group">
                     <div className={`absolute -inset-4 bg-gradient-to-r ${item.color} rounded-3xl opacity-30 group-hover:opacity-50 blur-xl transition duration-500`}></div>
-                    <div className="relative h-80 md:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+                    <div className="relative h-64 md:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
                         <img 
                             src={item.image} 
                             alt={item.title} 
@@ -116,7 +116,7 @@ const Classes = () => {
                     <div className="inline-block px-4 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold tracking-widest uppercase mb-2">
                         {item.tagline}
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
+                    <h2 className="text-2xl md:text-5xl font-black text-gray-900 leading-tight">
                         {item.title}
                     </h2>
                     <p className="text-lg text-gray-600 leading-relaxed">

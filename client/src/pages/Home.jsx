@@ -77,7 +77,7 @@ const Home = () => {
             <Navbar />
 
             {/*CAROUSEL*/}
-            <div className="relative h-[600px] w-full overflow-hidden">
+            <div className="relative h-[500px] md:h-[600px] w-full overflow-hidden">
                 {slides.map((slide, index) => (
                     <div 
                         key={index}
@@ -91,7 +91,7 @@ const Home = () => {
                             className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white px-4">
-                            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 drop-shadow-lg">
+                            <h1 className="text-3xl md:text-7xl font-extrabold tracking-tight mb-4 drop-shadow-lg">
                                 {slide.title}
                             </h1>
                             <p className="text-xl md:text-2xl font-light mb-8 max-w-2xl drop-shadow-md">
@@ -122,7 +122,7 @@ const Home = () => {
             </div>
 
             {/*FACILITIES*/}
-            <div className="py-20 px-4 max-w-7xl mx-auto text-center">
+            <div className="py-10 md:py-20 px-4 max-w-7xl mx-auto text-center">
                 <h2 className="text-4xl font-bold text-gray-900 mb-4">Fasilitas Premium</h2>
                 <p className="text-gray-500 mb-12 text-lg">Semua yang Anda butuhkan untuk membentuk tubuh impian.</p>
 
@@ -149,7 +149,7 @@ const Home = () => {
             </div>
 
             {/* GALLERY*/}
-            <div className="bg-gray-50 py-20 px-4">
+            <div className="bg-gray-50 py-10 md:py-20 px-4">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-12">
                         <h2 className="text-4xl font-bold text-gray-900 mb-4">Intip Gym Kami</h2>
@@ -186,12 +186,12 @@ const Home = () => {
             </div>
 
             {/* --- SECTION 4: TRAINERS --- */}
-            <div className="bg-black py-24 px-4 text-white">
+            <div className="bg-black py-12 md:py-24 px-4 text-white">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
                     
                     {/* Bagian Kiri: Text & Tombol */}
                     <div className="md:w-1/3 space-y-8">
-                        <h2 className="text-4xl md:text-5xl font-extrabold leading-tight">
+                        <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
                             Meet our Certified <br/> <span className="text-indigo-500">Personal Trainers</span>
                         </h2>
                         
@@ -221,10 +221,10 @@ const Home = () => {
 
                     {/* Bagian Kanan: Grid Foto Trainer */}
                     <div className="md:w-2/3 w-full">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                             {trainers.map((trainer, idx) => (
-                                <Reveal>
-                                <div key={idx} className="relative group overflow-hidden rounded-xl bg-gray-900 shadow-2xl border border-gray-800">
+                                <Reveal key={idx}>
+                                <div className="relative group overflow-hidden rounded-xl bg-gray-900 shadow-2xl border border-gray-800">
                                     <div className="absolute inset-0 bg-gradient-to-t from-indigo-900 via-transparent to-transparent opacity-80"></div>
                                     
                                     <img 
