@@ -14,30 +14,27 @@ const User = require('./models/User');
 
 const app = express();
 
-// --- 🔥 JURUS MANUAL CORS (Paste di Paling Atas) ---
+// --- 🔥 JURUS FINAL CORS (Revisi: Echo Origin) ---
 app.use((req, res, next) => {
-    // 1. Daftar Website yang Diizinkan
-    const allowedOrigins = [
-        "https://king-gym-app.vercel.app", 
-        "http://localhost:5173",
-        "https://king-gym-p2ipsya6b-radjas-projects-b03780ee.vercel.app"
-    ];
-    
+    // Ambil alamat si penanya (Frontend)
     const origin = req.headers.origin;
     
-    // 2. Cek Origin & Set Header
-    if (allowedOrigins.includes(origin)) {
+    // Jika ada yang bertanya, kita izinkan dia secara spesifik
+    // (Ini menghindari konflik antara '*' dan Credentials)
+    if (origin) {
         res.setHeader('Access-Control-Allow-Origin', origin);
-    } else {
-        // Fallback: Izinkan semua untuk debugging (Hati-hati, credentials: true butuh origin spesifik)
-        res.setHeader('Access-Control-Allow-Origin', '*');
     }
 
+    // Izinkan method standar
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    
+    // Izinkan header penting (Authorization untuk Token)
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
+    
+    // Izinkan kredensial (Cookie/Token)
     res.setHeader('Access-Control-Allow-Credentials', true);
 
-    // 3. PENTING: Jika request tipe OPTIONS (Pre-flight), langsung jawab OK & Stop.
+    // PENTING: Jika request hanya "Cek Ombak" (OPTIONS), langsung jawab OK.
     if (req.method === 'OPTIONS') {
         return res.status(200).send('OK');
     }
@@ -49,7 +46,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('✅ Server King Gym Berjalan Normal (Manual CORS Mode)!');
+    res.send('✅ Server King Gym Berjalan Normal (Echo Mode)!');
 });
 
 // Routes
