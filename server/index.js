@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./config/db'); 
 const path = require('path');
+const cors = require('cors');
 
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
@@ -14,34 +15,28 @@ const User = require('./models/User');
 
 const app = express();
 
+const whitelist = [
+    "https://king-gym-app.vercel.app", 
+    "https://king-gym-p2ipsya6b-radjas-projects-b03780ee.vercel.app",
+    "http://localhost:5173"
+];
+
 // --- 🔥 JURUS FINAL CORS (Revisi: Echo Origin) ---
-app.use((req, res, next) => {
-    // Ambil alamat si penanya (Frontend)
-    const origin = req.headers.origin;
-    
-    // Jika ada yang bertanya, kita izinkan dia secara spesifik
-    // (Ini menghindari konflik antara '*' dan Credentials)
-    if (origin) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    }
+app.use(cors({
+    origin: function (origin, callback) {
+        // Izinkan jika origin ada di whitelist atau jika request dari server-to-server (!origin)
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Ditolak oleh kebijakan CORS King Gym'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+}));
 
-    // Izinkan method standar
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    
-    // Izinkan header penting (Authorization untuk Token)
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
-    
-    // Izinkan kredensial (Cookie/Token)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // PENTING: Jika request hanya "Cek Ombak" (OPTIONS), langsung jawab OK.
-    if (req.method === 'OPTIONS') {
-        return res.status(200).send('OK');
-    }
-
-    next();
-});
-// -----------------------------------------------------
+app.options('*', cors());
 
 app.use(express.json());
 
