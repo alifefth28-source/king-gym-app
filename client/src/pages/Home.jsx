@@ -148,7 +148,7 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* GALLERY*/}
+            {/* GALLERY (PERBAIKAN: Menggunakan Layout Card Sederhana agar Responsive) */}
             <div className="bg-gray-50 py-10 md:py-20 px-4">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-12">
@@ -156,31 +156,41 @@ const Home = () => {
                         <p className="text-gray-500 text-lg">Suasana latihan yang nyaman, bersih, dan memotivasi.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-[600px]">
-                        <div className="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-2xl shadow-lg">
-                            <img src="https://images.unsplash.com/photo-1590487988256-9ed24133863e?q=80&w=1428&auto=format&fit=crop" alt="Gym Exterior Interior" className="w-full h-full object-cover transition duration-700 group-hover:scale-105" />
-                            <div className="absolute bottom-0 left-0 bg-black bg-opacity-60 text-white p-4 w-full translate-y-full group-hover:translate-y-0 transition duration-300">
-                                <p className="font-bold">Main Gym Area</p>
+                    {/* PERUBAHAN DISINI: Grid responsive (1 kolom HP, 2 kolom Tablet, 4 kolom Desktop) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        
+                        {/* ITEM 1 */}
+                        <div className="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1590487988256-9ed24133863e?q=80&w=1428&auto=format&fit=crop" alt="Main Gym Area" className="w-full h-80 object-cover transition duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90 flex items-end p-6">
+                                <h3 className="text-white text-xl font-bold">Main Gym Area</h3>
                             </div>
                         </div>
-                        <div className="relative group overflow-hidden rounded-2xl shadow-lg">
-                            <img src="https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=1374&auto=format&fit=crop" alt="Cardio Area" className="w-full h-full object-cover transition duration-700 group-hover:scale-105" />
-                             <div className="absolute bottom-0 left-0 bg-black bg-opacity-60 text-white p-2 w-full translate-y-full group-hover:translate-y-0 transition duration-300">
-                                <p className="text-sm font-bold">Cardio Zone</p>
+
+                        {/* ITEM 2 */}
+                        <div className="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=1374&auto=format&fit=crop" alt="Cardio Zone" className="w-full h-80 object-cover transition duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90 flex items-end p-6">
+                                <h3 className="text-white text-xl font-bold">Cardio Zone</h3>
                             </div>
                         </div>
-                        <div className="relative group overflow-hidden rounded-2xl shadow-lg">
-                            <img src="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?q=80&w=1471&auto=format&fit=crop" alt="Weights" className="w-full h-full object-cover transition duration-700 group-hover:scale-105" />
-                            <div className="absolute bottom-0 left-0 bg-black bg-opacity-60 text-white p-2 w-full translate-y-full group-hover:translate-y-0 transition duration-300">
-                                <p className="text-sm font-bold">Free Weights</p>
+
+                        {/* ITEM 3 */}
+                        <div className="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?q=80&w=1471&auto=format&fit=crop" alt="Free Weights" className="w-full h-80 object-cover transition duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90 flex items-end p-6">
+                                <h3 className="text-white text-xl font-bold">Free Weights</h3>
                             </div>
                         </div>
-                        <div className="md:col-span-2 relative group overflow-hidden rounded-2xl shadow-lg">
-                            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop" alt="Functional Training" className="w-full h-full object-cover transition duration-700 group-hover:scale-105" />
-                            <div className="absolute bottom-0 left-0 bg-black bg-opacity-60 text-white p-4 w-full translate-y-full group-hover:translate-y-0 transition duration-300">
-                                <p className="font-bold">CrossFit & Functional Area</p>
+
+                        {/* ITEM 4 */}
+                        <div className="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop" alt="CrossFit" className="w-full h-80 object-cover transition duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90 flex items-end p-6">
+                                <h3 className="text-white text-xl font-bold">CrossFit & Functional</h3>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

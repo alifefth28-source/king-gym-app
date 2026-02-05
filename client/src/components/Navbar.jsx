@@ -8,20 +8,29 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Logic Auth (TIDAK DIUBAH)
+    // Logic Auth
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
     const isLoggedIn = !!token;
 
-    const handleLogout = () => {
-        MySwal.confirm('Yakin ingin keluar?', 'Anda harus login lagi nanti.', () => {
+    // --- PERBAIKAN LOGIC LOGOUT ---
+    const handleLogout = async () => {
+        // 1. Tampilkan Pop-up Konfirmasi dulu
+        const result = await MySwal.confirm(
+            'Yakin ingin keluar?', 
+            'Anda harus login lagi nanti.', 
+            'Ya, Keluar' // <--- Argumen ke-3 harus TEKS TOMBOL, bukan fungsi
+        );
+
+        // 2. Jika user klik "Ya, Keluar", baru jalankan fungsi logout
+        if (result.isConfirmed) {
             localStorage.clear();
             MySwal.toast('success', 'Berhasil Logout');
             navigate('/login');
-        });
+        }
     };
 
-    // Efek scroll (Hanya untuk shadow dan padding, bukan transparansi lagi agar aman)
+    // Efek scroll
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 50) {
@@ -34,11 +43,11 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Daftar Menu (Membership DITAMBAHKAN di sini)
+    // Daftar Menu
     const menuItems = [
         { name: 'Cari Kelas', path: '/classes' },
         { name: 'Jadwal Saya', path: '/my-bookings' },
-        { name: 'Membership', path: '/membership' }, // <-- MENU BARU DITAMBAHKAN
+        { name: 'Membership', path: '/membership' },
         { name: 'Panduan Pemula', path: '/Tutorial' },
         { name: 'Profil Saya', path: '/profile' },
     ];
@@ -53,9 +62,6 @@ const Navbar = () => {
     };
 
     return (
-        // PERUBAHAN UTAMA DI SINI:
-        // 1. Menggunakan 'sticky top-0' agar konten di bawahnya turun (tidak nabrak).
-        // 2. Menggunakan 'bg-gray-900' (hitam) permanen agar teks putih selalu terbaca.
         <nav className={`sticky top-0 z-50 w-full transition-all duration-300 bg-gray-900 ${scrolled ? 'shadow-xl py-2' : 'py-4'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
@@ -67,7 +73,7 @@ const Navbar = () => {
                         </h1>
                     </div>
 
-                    {/* DESKTOP MENU (Hidden di HP) */}
+                    {/* DESKTOP MENU */}
                     <div className="hidden md:block">
                         <div className="ml-10 flex items-baseline space-x-4">
                             {isLoggedIn ? (
@@ -77,7 +83,6 @@ const Navbar = () => {
                                             {item.name}
                                         </Link>
                                     ))}
-                                    {/* Tombol Logout Desktop */}
                                     <button 
                                         onClick={handleLogout} 
                                         className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-bold ml-4 transition shadow-md"
@@ -94,7 +99,7 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* MOBILE MENU BUTTON (Hamburger) */}
+                    {/* MOBILE MENU BUTTON */}
                     <div className="-mr-2 flex md:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
@@ -102,7 +107,6 @@ const Navbar = () => {
                             className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                         >
                             <span className="sr-only">Open main menu</span>
-                            {/* Ikon Hamburger / Close */}
                             {!isOpen ? (
                                 <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -117,7 +121,7 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* MOBILE MENU DROPDOWN (Muncul saat tombol diklik) */}
+            {/* MOBILE MENU DROPDOWN */}
             {isOpen && (
                 <div className="md:hidden bg-gray-800 absolute w-full shadow-2xl border-t border-gray-700">
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -130,7 +134,7 @@ const Navbar = () => {
                                     <Link 
                                         key={item.path} 
                                         to={item.path} 
-                                        onClick={() => setIsOpen(false)} // Tutup menu saat diklik
+                                        onClick={() => setIsOpen(false)}
                                         className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-3 rounded-md text-base font-medium"
                                     >
                                         {item.name}
