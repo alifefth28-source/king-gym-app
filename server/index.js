@@ -31,19 +31,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/users', userRoutes);
 
 // Sinkronisasi Database
-sequelize.authenticate() 
-    .then(() => {
-        console.log("✅ Database Lengkap Siap!");
-        // Di Vercel, app.listen sebenarnya tidak wajib, tapi tidak apa-apa ada disini
-        if (process.env.NODE_ENV !== 'production') {
-            app.listen(5000, () => {
-                console.log('🚀 Server running on port 5000');
-            });
-        }
-    })
-    .catch(err => {
-        console.error("❌ Gagal Konek Database:", err);
+if (require.main === module) {
+    app.listen(5000, () => {
+        console.log('🚀 Server running on port 5000');
     });
+}
 
 module.exports = app;
-// Force update Vercel
