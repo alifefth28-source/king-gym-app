@@ -1,19 +1,23 @@
 const { Sequelize } = require('sequelize');
-const mysql2 = require('mysql2'); // Wajib untuk Vercel
+const mysql2 = require('mysql2'); 
+const pg = require('pg'); // Opsional, jaga-jaga jika Vercel bingung
 
-// Pastikan DATABASE_URL ada di Environment Variables (.env)
-if (!process.env.DATABASE_URL) {
+// 1. Ambil DATABASE_URL dari environment
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
     throw new Error('❌ DATABASE_URL tidak ditemukan di environment variables!');
 }
 
-const db = new Sequelize(process.env.DATABASE_URL, {
+// 2. Setup Sequelize dengan konfigurasi yang lebih aman
+const db = new Sequelize(connectionString, {
     dialect: 'mysql',
-    dialectModule: mysql2, // 🔥 Tetap WAJIB ada untuk Vercel/Serverless
-    logging: false, // Set ke console.log jika ingin melihat raw SQL query
+    dialectModule: mysql2, // Wajib untuk Vercel
+    logging: false, 
     dialectOptions: {
         ssl: {
-            
-            rejectUnauthorized: false // Mengizinkan Self-signed certs (standar untuk cloud db)
+            require: true,
+            rejectUnauthorized: false
         }
     },
     pool: {
@@ -21,14 +25,11 @@ const db = new Sequelize(process.env.DATABASE_URL, {
         min: 0,
         acquire: 30000,
         idle: 10000
-    }``
-});
+    }
+}); // <--- TANDA TITIK KOMA INI SANGAT PENTING!
 
-// Logging status koneksi (mengambil host dari config sequelize yang sudah di-parse)
-console.log(`📡 Mencoba konek ke DB Host: ${db.config.host}`);
+// 3. Cek koneksi
+console.log(`📡 Mencoba konek ke DB...`);
 
-db.authenticate()
-  .then(() => console.log('✅ BERHASIL KONEK DATABASE (Via URL)!'))
-  .catch(err => console.error('❌ GAGAL KONEK DATABASE:', err));
-
+// Export dulu baru authenticate (agar tidak memblokir import)
 module.exports = db;
