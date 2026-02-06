@@ -8,21 +8,21 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Logic Auth
+    // --- LOGIC AUTH & ROLE ---
     const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role'); // Ambil role (admin/member)
     const user = JSON.parse(localStorage.getItem('user'));
+    
     const isLoggedIn = !!token;
+    const isAdmin = role === 'admin'; // Boolean check
 
-    // --- PERBAIKAN LOGIC LOGOUT ---
     const handleLogout = async () => {
-        // 1. Tampilkan Pop-up Konfirmasi dulu
         const result = await MySwal.confirm(
             'Yakin ingin keluar?', 
             'Anda harus login lagi nanti.', 
-            'Ya, Keluar' // <--- Argumen ke-3 harus TEKS TOMBOL, bukan fungsi
+            'Ya, Keluar'
         );
 
-        // 2. Jika user klik "Ya, Keluar", baru jalankan fungsi logout
         if (result.isConfirmed) {
             localStorage.clear();
             MySwal.toast('success', 'Berhasil Logout');
@@ -43,8 +43,10 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Daftar Menu
-    const menuItems = [
+    // --- DAFTAR MENU (DIPISAH ANTARA MEMBER & ADMIN) ---
+    
+    // 1. Menu untuk MEMBER
+    const memberItems = [
         { name: 'Cari Kelas', path: '/classes' },
         { name: 'Jadwal Saya', path: '/my-bookings' },
         { name: 'Membership', path: '/membership' },
@@ -52,24 +54,49 @@ const Navbar = () => {
         { name: 'Profil Saya', path: '/profile' },
     ];
 
+    // 2. Menu untuk ADMIN (Sesuaikan path ini dengan route di App.jsx Anda)
+    const adminItems = [
+        { name: 'Dashboard Admin', path: '/admin' },
+        { name: 'Kelola Kelas', path: '/admin/manage-classes' }, // Opsional: Hapus jika belum ada pagenya
+        { name: 'Validasi Member', path: '/admin/validasi' },    // Opsional
+    ];
+
+    // Pilih menu berdasarkan role
+    const menuItems = isAdmin ? adminItems : memberItems;
+
+    // --- LOGIC WARNA NAVBAR (Merah untuk Admin, Hitam untuk Member) ---
+    const getNavbarBg = () => {
+        if (isAdmin) {
+            return scrolled ? 'bg-red-900 shadow-xl py-2' : 'bg-red-800 py-4';
+        } else {
+            return scrolled ? 'bg-gray-900 shadow-xl py-2' : 'bg-gray-900 py-4'; // Tetap dark mode untuk member
+        }
+    };
+
     // Helper class untuk link aktif
     const getLinkClass = (path) => {
         const baseClass = "px-3 py-2 rounded-md text-sm font-medium transition duration-300";
-        const activeClass = "bg-indigo-600 text-white shadow-lg transform scale-105";
+        // Warna aktif beda dikit untuk admin biar kontras
+        const activeClass = isAdmin 
+            ? "bg-red-700 text-white shadow-lg transform scale-105" 
+            : "bg-indigo-600 text-white shadow-lg transform scale-105";
+            
         const inactiveClass = "text-gray-300 hover:bg-gray-700 hover:text-white";
 
         return location.pathname === path ? `${baseClass} ${activeClass}` : `${baseClass} ${inactiveClass}`;
     };
 
     return (
-        <nav className={`sticky top-0 z-50 w-full transition-all duration-300 bg-gray-900 ${scrolled ? 'shadow-xl py-2' : 'py-4'}`}>
+        <nav className={`sticky top-0 z-50 w-full transition-all duration-300 ${getNavbarBg()}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     
                     {/* LOGO */}
-                    <div className="flex-shrink-0 cursor-pointer" onClick={() => navigate('/')}>
+                    <div className="flex-shrink-0 cursor-pointer" onClick={() => navigate(isAdmin ? '/admin' : '/')}>
                         <h1 className="text-2xl font-extrabold tracking-tighter text-white">
-                            KING <span className="text-indigo-500">GYM</span>
+                            KING <span className={isAdmin ? "text-yellow-400" : "text-indigo-500"}>
+                                {isAdmin ? 'ADMIN' : 'GYM'}
+                            </span>
                         </h1>
                     </div>
 
@@ -85,7 +112,7 @@ const Navbar = () => {
                                     ))}
                                     <button 
                                         onClick={handleLogout} 
-                                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-bold ml-4 transition shadow-md"
+                                        className={`${isAdmin ? 'bg-gray-800 hover:bg-gray-700' : 'bg-red-600 hover:bg-red-700'} text-white px-4 py-2 rounded-md text-sm font-bold ml-4 transition shadow-md`}
                                     >
                                         Logout
                                     </button>
@@ -99,7 +126,7 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* MOBILE MENU BUTTON */}
+                    {/* MOBILE MENU BUTTON (Hamburger) */}
                     <div className="-mr-2 flex md:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
@@ -128,7 +155,7 @@ const Navbar = () => {
                         {isLoggedIn ? (
                             <>
                                 <div className="px-3 py-2 text-gray-400 text-sm font-bold border-b border-gray-700 mb-2">
-                                    Halo, {user?.username || 'Member'} 👋
+                                    Halo, {isAdmin ? 'Admin' : (user?.username || 'Member')} 👋
                                 </div>
                                 {menuItems.map((item) => (
                                     <Link 

@@ -12,7 +12,7 @@ const MyBookings = () => {
     const token = localStorage.getItem('token');
 
     // URL API yang benar
-    const API_URL = 'https://king-gym-p2ipsya6b-radjas-projects-b03780ee.vercel.app/api';
+    const API_URL = 'https://king-gym-api.vercel.app/api';
 
     const fetchMyBookings = async () => {
         setLoading(true); // Mulai loading
