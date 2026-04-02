@@ -55,10 +55,11 @@ const Navbar = () => {
     ];
 
     // 2. Menu untuk ADMIN (Sesuaikan path ini dengan route di App.jsx Anda)
+    // PERBAIKAN: Menyesuaikan path dengan App.jsx
     const adminItems = [
-        { name: 'Dashboard Admin', path: '/AdminDashboard' },
-        { name: 'Kelola Kelas', path: '/AdminMembers' }, 
-        { name: 'Validasi Member', path: '/AdminScan' },    
+        { name: 'Dashboard Admin', path: '/admin' },
+        { name: 'Kelola Kelas', path: '/admin/members' }, 
+        { name: 'Validasi Member', path: '/admin-scan' },    
     ];
 
     // Pilih menu berdasarkan role

@@ -17,11 +17,11 @@ const Booking = require('./models/Booking'); // Pastikan file models/Booking.js 
 
 // --- 2. DEFINISI RELASI (ASSOCIATIONS) MANUAL ---
 // Ini penting supaya saat Controller memanggil "include: [Class]", server tidak crash.
-User.hasMany(Booking, { foreignKey: 'user_id' });
-Booking.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(Booking, { foreignKey: 'UserID' });
+Booking.belongsTo(User, { foreignKey: 'UserID' });
 
-Class.hasMany(Booking, { foreignKey: 'class_id' });
-Booking.belongsTo(Class, { foreignKey: 'class_id' });
+Class.hasMany(Booking, { foreignKey: 'ClassID' });
+Booking.belongsTo(Class, { foreignKey: 'ClassID' });
 
 const app = express();
 
