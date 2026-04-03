@@ -3,30 +3,38 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const { verifyToken } = require('../middleware/authMiddleware');
 const multer = require('multer');
-const path = require('path');
 
+// --- SETUP CLOUDINARY ---
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+// Konfigurasi menggunakan nilai dari .env
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-        cb(null, 'uploads/'); 
+// Setup Multer Storage agar langsung menembak ke Cloudinary
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'king-gym-profiles', // Nama folder yang akan otomatis terbuat di Cloudinary
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
+        transformation: [{ width: 500, height: 500, crop: 'limit' }] // Opsional: otomatis kompres/resize
     },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
 });
 
 const upload = multer({ storage: storage });
+// ------------------------
 
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.get('/users', authController.getAllUsers);
 router.get('/me', verifyToken, authController.getMe);
-router.get('/users', authController.getAllUsers);
 router.post('/scan', authController.scanMember);
 
-// Rute Upload Foto (Menggunakan middleware upload.single)
+// Route Upload Foto
 router.post('/upload-photo', verifyToken, upload.single('photo'), authController.uploadPhoto); 
 
 module.exports = router;
