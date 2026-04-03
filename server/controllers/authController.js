@@ -1,42 +1,47 @@
-
 const User = require('../models/User'); 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-
-
 exports.register = async (req, res) => {
     try {
-        console.log("1. Menerima Data:", req.body); 
+        const { username, email, password, membershipType, role } = req.body; 
 
-        const { username, email, password, role } = req.body;
-
-       
         const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            return res.status(400).send('Email sudah terdaftar!');
-        }
+        if (existingUser) return res.status(400).json({ message: "Email sudah terdaftar" });
 
-       
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        
+        // LOGIC HITUNG EXPIRY
+        let membership_expiry = null;
+        let finalMembershipType = null;
+
+        if (membershipType && membershipType !== "") {
+            finalMembershipType = membershipType;
+            const now = new Date();
+            
+            if (membershipType === 'Silver') now.setDate(now.getDate() + 30);
+            else if (membershipType === 'Gold') now.setDate(now.getDate() + 90);
+            else if (membershipType === 'Platinum') now.setDate(now.getDate() + 365);
+            
+            membership_expiry = now;
+        }
+
         const newUser = await User.create({
-            username,
-            email,
+            username, 
+            email, 
             password: hashedPassword,
-            role: role || 'member'
+            role: role || 'member', 
+            membership_type: finalMembershipType,
+            membership_expiry: membership_expiry
         });
 
-        console.log("✅ SUKSES: User berhasil dibuat!"); 
-        res.status(201).json({ message: "Registrasi Berhasil!", user: newUser });
+        res.status(201).json({ message: "Registrasi berhasil", userId: newUser.id });
 
     } catch (err) {
-        console.error("❌ ERROR REGISTER:", err);
-        res.status(500).send("Terjadi kesalahan server: " + err.message);
+        console.error("ERROR REGISTER:", err);
+        res.status(500).json({ message: "Terjadi kesalahan server" });
     }
 };
-
 
 exports.login = async (req, res) => {
     try {
@@ -51,11 +56,11 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ id: user.id, role: user.role }, 'RAHASIA_NEGARA', { expiresIn: '1h' });
 
         res.json({
-        token,
-        role: user.role,
-        username: user.username, 
-        message: "Login berhasil"
-    });
+            token,
+            role: user.role,
+            username: user.username, 
+            message: "Login berhasil"
+        });
 
     } catch (err) {
         console.error(err);
@@ -63,23 +68,20 @@ exports.login = async (req, res) => {
     }
 };
 
-
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.findAll({
-            attributes: { exclude: ['password'] }
+            attributes: ['id', 'username', 'email', 'role', 'createdAt', 'membership_type', 'membership_expiry']
         });
         res.json(users);
     } catch (err) {
         console.error(err);
-        res.status(500).send("Gagal ambil data users");
+        res.status(500).json({ message: "Gagal mengambil data user" });
     }
 };
 
-
 exports.getMe = async (req, res) => {
     try {
-        // Ambil data user berdasarkan ID dari token, tapi sembunyikan passwordnya
         const user = await User.findByPk(req.user.id, {
             attributes: { exclude: ['password'] }
         });
@@ -100,7 +102,7 @@ exports.uploadPhoto = async (req, res) => {
         }
 
         const userId = req.user.id;
-        const photoUrl = req.file.path; 
+        const photoUrl = req.file.path; // Akan diisi oleh URL Cloudinary
 
         await User.update({ profile_picture: photoUrl }, { where: { id: userId } });
 
@@ -115,77 +117,17 @@ exports.uploadPhoto = async (req, res) => {
     }
 };
 
-exports.getAllUsers = async (req, res) => {
-    try {
-        const users = await User.findAll({
-            attributes: ['id', 'username', 'email', 'role', 'createdAt', 'membership_type', 'membership_expiry']// Ambil data penting saja
-        });
-        res.json(users);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Gagal mengambil data user" });
-    }
-};
-
-exports.register = async (req, res) => {
-    try {
-        // 1. Terima membershipType juga dari body
-        const { username, email, password, membershipType } = req.body; 
-
-        // Cek user ganda
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) return res.status(400).json({ message: "Email sudah terdaftar" });
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // 2. LOGIC HITUNG EXPIRY (Jika paket dipilih)
-        let membership_expiry = null;
-        let finalMembershipType = null;
-
-        if (membershipType && membershipType !== "") {
-            finalMembershipType = membershipType;
-            const now = new Date();
-            
-            // Tambahkan hari sesuai paket
-            if (membershipType === 'Silver') now.setDate(now.getDate() + 30);
-            else if (membershipType === 'Gold') now.setDate(now.getDate() + 90);
-            else if (membershipType === 'Platinum') now.setDate(now.getDate() + 365);
-            
-            membership_expiry = now;
-        }
-
-        // 3. Simpan ke Database
-        const newUser = await User.create({
-            username, 
-            email, 
-            password: hashedPassword,
-            role: 'member', // Default role
-            membership_type: finalMembershipType,   // Simpan Tipe
-            membership_expiry: membership_expiry    // Simpan Tanggal Expired
-        });
-
-        res.status(201).json({ message: "Registrasi berhasil", userId: newUser.id });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Terjadi kesalahan server" });
-    }
-};
-
 exports.scanMember = async (req, res) => {
     try {
         const { qrData } = req.body;
 
-     
         if (!qrData.startsWith("KINGGYM-")) {
             return res.status(400).json({ message: "QR Code Tidak Valid! Bukan milik King Gym." });
         }
 
         const parts = qrData.split('-');
-      
         const userId = parts[1];
 
-    
         const member = await User.findByPk(userId);
 
         if (!member) {
@@ -200,7 +142,6 @@ exports.scanMember = async (req, res) => {
             });
         }
 
-    
         const now = new Date();
         const expiryDate = new Date(member.membership_expiry);
 
@@ -212,7 +153,6 @@ exports.scanMember = async (req, res) => {
             });
         }
 
-   
         return res.status(200).json({
             status: 'success',
             member: member,
