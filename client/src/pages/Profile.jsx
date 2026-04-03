@@ -39,7 +39,7 @@ const Profile = () => {
             await axios.post('https://king-gym-api.vercel.app/api/auth/upload-photo', formData, {
                 headers: { 
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
+                    
                 }
             });
             MySwal.toast('success', 'Foto Profil Berhasil Diupdate!');
